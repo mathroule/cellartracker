@@ -1,5 +1,6 @@
 """Errors for CellarTracker."""
 
+
 class AuthenticationError(Exception):
     """Wrong username or password."""
 
