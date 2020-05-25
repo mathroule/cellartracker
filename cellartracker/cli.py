@@ -1,18 +1,31 @@
-"""Console script for cellartracker."""
+"""Console script for CellarTracker"""
 import argparse
 import sys
 
+from .cellartracker import CellarTracker
+from .enum import CellarTrackerFormat, DEFAULT_FORMAT, CellarTrackerTable, DEFAULT_TABLE
 
 def main():
-    """Console script for cellartracker."""
+    """Console script for CellarTracker"""
     parser = argparse.ArgumentParser()
-    parser.add_argument('_', nargs='*')
+    parser.add_argument('-u', '--username',
+                        required=True, help='Username from CellarTracker')
+    parser.add_argument('-p', '--password',
+                        required=True, help='Password from CellarTracker')
+    parser.add_argument('-t', '--table',
+                        required=False, help='Table from CellarTracker', choices=CellarTrackerTable.__members__, default=DEFAULT_TABLE)
+    parser.add_argument('-f', '--format',
+                        required=False, help='Format from CellarTracker', choices=CellarTrackerFormat.__members__, default=DEFAULT_FORMAT)
     args = parser.parse_args()
 
-    print("Arguments: " + str(args._))
-    print("Replace this message by putting your code into "
-          "cellartracker.cli.main")
-    return 0
+    try:
+        cellartracker = CellarTracker(username=args.username, password=args.password)
+        response = cellartracker.client.get(table=args.table, format=args.format)
+
+        return 0
+    except BaseException as exp:
+        print(exp)
+        return 1
 
 
 if __name__ == "__main__":
