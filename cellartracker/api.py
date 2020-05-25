@@ -6,6 +6,7 @@ from .errors import AuthenticationError, CannotConnect
 
 _LOGGER = logging.getLogger(__name__)
 
+
 class CellarTrackerAPI(object):
 
     def __init__(self):
