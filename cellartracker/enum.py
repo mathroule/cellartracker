@@ -10,9 +10,6 @@ class CellarTrackerFormat(Enum):
     csv = "csv"
 
 
-DEFAULT_FORMAT = CellarTrackerFormat.html
-
-
 class CellarTrackerTable(Enum):
     List = "List"
     Inventory = "Inventory"
@@ -26,6 +23,3 @@ class CellarTrackerTable(Enum):
     ProReview = "ProReview"
     Bottles = "Bottles"
     FoodTag = "FoodTag"
-
-
-DEFAULT_TABLE = CellarTrackerTable.List
