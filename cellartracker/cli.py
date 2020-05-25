@@ -3,7 +3,7 @@ import argparse
 import sys
 
 from .cellartracker import CellarTracker
-from .enum import CellarTrackerFormat, DEFAULT_FORMAT, CellarTrackerTable, DEFAULT_TABLE
+from .enum import CellarTrackerFormat, CellarTrackerTable
 
 def main():
     """Console script for CellarTracker"""
@@ -13,15 +13,15 @@ def main():
     parser.add_argument('-p', '--password',
                         required=True, help='Password from CellarTracker')
     parser.add_argument('-t', '--table',
-                        required=False, help='Table from CellarTracker', choices=CellarTrackerTable.__members__, default=DEFAULT_TABLE)
+                        required=False, help='Table from CellarTracker', choices=CellarTrackerTable.__members__, default=CellarTrackerTable.List.value)
     parser.add_argument('-f', '--format',
-                        required=False, help='Format from CellarTracker', choices=CellarTrackerFormat.__members__, default=DEFAULT_FORMAT)
+                        required=False, help='Format from CellarTracker', choices=CellarTrackerFormat.__members__, default=CellarTrackerFormat.tab.value)
     args = parser.parse_args()
 
     try:
         cellartracker = CellarTracker(username=args.username, password=args.password)
-        response = cellartracker.client.get(table=args.table, format=args.format)
-
+        response = cellartracker.client.get(table=CellarTrackerTable[args.table], format=CellarTrackerFormat[args.format])
+        print(response)
         return 0
     except BaseException as exp:
         print(exp)

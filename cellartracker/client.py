@@ -1,6 +1,5 @@
 from .api import CellarTrackerAPI
-
-from .enum import CellarTrackerFormat, DEFAULT_FORMAT, CellarTrackerTable, DEFAULT_TABLE
+from .enum import CellarTrackerFormat, CellarTrackerTable
 
 class CellarTrackerClient(object):
 
@@ -10,12 +9,12 @@ class CellarTrackerClient(object):
         self._username = username
         self._password = password
 
-    def get(self, table:CellarTrackerTable=DEFAULT_TABLE, format:CellarTrackerFormat=DEFAULT_FORMAT):
+    def get(self, table:CellarTrackerTable, format:CellarTrackerFormat):
         """Get data."""
         return self._api.execute(params={
             "User": self._username,
             "Password": self._password,
-            "Table": table,
-            "Format": format,
+            "Table": table.value,
+            "Format": format.value,
             "Location": 1
         })
