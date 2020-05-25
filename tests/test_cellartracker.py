@@ -57,8 +57,8 @@ class TestCellartracker(unittest.TestCase):
         file.close
 
         cellartracker = CellarTracker(username="invalid-username", password="invalid-password")
-        data = cellartracker.get_list()
-        self.assertRaises(AuthenticationError, data)
+        with self.assertRaises(AuthenticationError):
+            cellartracker.get_list()
 
     @requests_mock.Mocker()
     def test_get_list_with_error(self, m):
@@ -67,5 +67,5 @@ class TestCellartracker(unittest.TestCase):
         m.register_uri("GET", url, exc=requests.exceptions.ConnectTimeout)
 
         cellartracker = CellarTracker(username="test-username", password="test-password")
-        data = cellartracker.get_list()
-        self.assertRaises(CannotConnect, data)
+        with self.assertRaises(CannotConnect):
+            cellartracker.get_list()
