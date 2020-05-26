@@ -322,3 +322,61 @@ class TestCellartracker(unittest.TestCase):
         cellartracker = CellarTracker(username="test-username", password="test-password")
         with self.assertRaises(CannotConnect):
             cellartracker.get_availability()
+
+    @requests_mock.Mocker()
+    def test_get_bottles(self, m):
+        """Test get bottles."""
+        url = "https://www.cellartracker.com/xlquery.asp?User=test-username&Password=test-password&Table=Bottles&Format=tab&Location=1"
+        file = open("./tests/fixtures/bottles.tsv", "r")
+        m.register_uri("GET", url, status_code=200, text=file.read())
+        file.close
+
+        cellartracker = CellarTracker(username="test-username", password="test-password")
+        data = cellartracker.get_bottles()
+        self.assertEqual([
+            {'BottleState': '-1', 'iWine': '684674', 'Vintage': '2008', 'Wine': 'Pétrus', 'Locale': 'France, Bordeaux, Libournais, Pomerol', 'Quantity': '1', 'BottleSize': '750ml', 'Location': '(n/a)', 'Bin': '', 'Store': 'Unknown', 'PurchaseDate': '5/25/2020', 'DeliveryDate': '5/25/2020', 'BottleCost': '0', 'BottleCostCurrency': 'EUR', 'BottleNote': '', 'PurchaseNote': '', 'ConsumptionDate': '', 'ConsumptionType': '', 'ShortType': '', 'ConsumptionNote': '', 'ConsumptionRevenue': '', 'ConsumptionRevenueCurrency': ''},
+            {'BottleState': '-1', 'iWine': '684674', 'Vintage': '2008', 'Wine': 'Pétrus', 'Locale': 'France, Bordeaux, Libournais, Pomerol', 'Quantity': '1', 'BottleSize': '750ml', 'Location': '(n/a)', 'Bin': '', 'Store': 'Unknown', 'PurchaseDate': '5/25/2020', 'DeliveryDate': '5/25/2020', 'BottleCost': '0', 'BottleCostCurrency': 'EUR', 'BottleNote': '', 'PurchaseNote': '', 'ConsumptionDate': '', 'ConsumptionType': '', 'ShortType': '', 'ConsumptionNote': '', 'ConsumptionRevenue': '', 'ConsumptionRevenueCurrency': ''},
+            {'BottleState': '-1', 'iWine': '684674', 'Vintage': '2008', 'Wine': 'Pétrus', 'Locale': 'France, Bordeaux, Libournais, Pomerol', 'Quantity': '1', 'BottleSize': '750ml', 'Location': '(n/a)', 'Bin': '', 'Store': 'Unknown', 'PurchaseDate': '5/25/2020', 'DeliveryDate': '5/25/2020', 'BottleCost': '0', 'BottleCostCurrency': 'EUR', 'BottleNote': '', 'PurchaseNote': '', 'ConsumptionDate': '', 'ConsumptionType': '', 'ShortType': '', 'ConsumptionNote': '', 'ConsumptionRevenue': '', 'ConsumptionRevenueCurrency': ''},
+            {'BottleState': '0', 'iWine': '118542', 'Vintage': '2003', 'Wine': 'Domaine de la Romanée-Conti La Tâche', 'Locale': 'France, Burgundy, Côte de Nuits, La Tâche Grand Cru', 'Quantity': '1', 'BottleSize': '750ml', 'Location': 'Cellar', 'Bin': '', 'Store': 'Unknown', 'PurchaseDate': '4/8/2020', 'DeliveryDate': '4/8/2020', 'BottleCost': '3500', 'BottleCostCurrency': 'EUR', 'BottleNote': '', 'PurchaseNote': '', 'ConsumptionDate': '5/1/2020', 'ConsumptionType': 'Drank from my cellar', 'ShortType': 'Drank', 'ConsumptionNote': 'Absolutely fantastic wine!', 'ConsumptionRevenue': '', 'ConsumptionRevenueCurrency': ''},
+            {'BottleState': '0', 'iWine': '1367113', 'Vintage': '2011', 'Wine': "Château d'Yquem", 'Locale': 'France, Bordeaux, Sauternais, Sauternes', 'Quantity': '1', 'BottleSize': '750ml', 'Location': 'Cellar', 'Bin': '', 'Store': 'Unknown', 'PurchaseDate': '11/6/2019', 'DeliveryDate': '11/6/2019', 'BottleCost': '230', 'BottleCostCurrency': 'EUR', 'BottleNote': '', 'PurchaseNote': '', 'ConsumptionDate': '5/21/2020', 'ConsumptionType': 'Drank from my cellar', 'ShortType': 'Drank', 'ConsumptionNote': 'Excellent!', 'ConsumptionRevenue': '', 'ConsumptionRevenueCurrency': ''},
+            {'BottleState': '1', 'iWine': '118542', 'Vintage': '2003', 'Wine': 'Domaine de la Romanée-Conti La Tâche', 'Locale': 'France, Burgundy, Côte de Nuits, La Tâche Grand Cru', 'Quantity': '1', 'BottleSize': '750ml', 'Location': 'Cellar', 'Bin': '', 'Store': 'Unknown', 'PurchaseDate': '4/8/2020', 'DeliveryDate': '4/8/2020', 'BottleCost': '3500', 'BottleCostCurrency': 'EUR', 'BottleNote': '', 'PurchaseNote': '', 'ConsumptionDate': '', 'ConsumptionType': '', 'ShortType': '', 'ConsumptionNote': '', 'ConsumptionRevenue': '', 'ConsumptionRevenueCurrency': ''},
+            {'BottleState': '1', 'iWine': '1367113', 'Vintage': '2011', 'Wine': "Château d'Yquem", 'Locale': 'France, Bordeaux, Sauternais, Sauternes', 'Quantity': '1', 'BottleSize': '750ml', 'Location': 'Cellar', 'Bin': '', 'Store': 'Unknown', 'PurchaseDate': '11/6/2019', 'DeliveryDate': '11/6/2019', 'BottleCost': '230', 'BottleCostCurrency': 'EUR', 'BottleNote': '', 'PurchaseNote': '', 'ConsumptionDate': '', 'ConsumptionType': '', 'ShortType': '', 'ConsumptionNote': '', 'ConsumptionRevenue': '', 'ConsumptionRevenueCurrency': ''},
+            {'BottleState': '1', 'iWine': '1367113', 'Vintage': '2011', 'Wine': "Château d'Yquem", 'Locale': 'France, Bordeaux, Sauternais, Sauternes', 'Quantity': '1', 'BottleSize': '750ml', 'Location': 'Cellar', 'Bin': '', 'Store': 'Unknown', 'PurchaseDate': '11/6/2019', 'DeliveryDate': '11/6/2019', 'BottleCost': '230', 'BottleCostCurrency': 'EUR', 'BottleNote': '', 'PurchaseNote': '', 'ConsumptionDate': '', 'ConsumptionType': '', 'ShortType': '', 'ConsumptionNote': '', 'ConsumptionRevenue': '', 'ConsumptionRevenueCurrency': ''},
+            {'BottleState': '1', 'iWine': '1367113', 'Vintage': '2011', 'Wine': "Château d'Yquem", 'Locale': 'France, Bordeaux, Sauternais, Sauternes', 'Quantity': '1', 'BottleSize': '750ml', 'Location': 'Cellar', 'Bin': '', 'Store': 'Unknown', 'PurchaseDate': '11/6/2019', 'DeliveryDate': '11/6/2019', 'BottleCost': '230', 'BottleCostCurrency': 'EUR', 'BottleNote': '', 'PurchaseNote': '', 'ConsumptionDate': '', 'ConsumptionType': '', 'ShortType': '', 'ConsumptionNote': '', 'ConsumptionRevenue': '', 'ConsumptionRevenueCurrency': ''},
+            {'BottleState': '1', 'iWine': '1367113', 'Vintage': '2011', 'Wine': "Château d'Yquem", 'Locale': 'France, Bordeaux, Sauternais, Sauternes', 'Quantity': '1', 'BottleSize': '750ml', 'Location': 'Cellar', 'Bin': '', 'Store': 'Unknown', 'PurchaseDate': '11/6/2019', 'DeliveryDate': '11/6/2019', 'BottleCost': '230', 'BottleCostCurrency': 'EUR', 'BottleNote': '', 'PurchaseNote': '', 'ConsumptionDate': '', 'ConsumptionType': '', 'ShortType': '', 'ConsumptionNote': '', 'ConsumptionRevenue': '', 'ConsumptionRevenueCurrency': ''},
+            {'BottleState': '1', 'iWine': '1367113', 'Vintage': '2011', 'Wine': "Château d'Yquem", 'Locale': 'France, Bordeaux, Sauternais, Sauternes', 'Quantity': '1', 'BottleSize': '750ml', 'Location': 'Cellar', 'Bin': '', 'Store': 'Unknown', 'PurchaseDate': '11/6/2019', 'DeliveryDate': '11/6/2019', 'BottleCost': '230', 'BottleCostCurrency': 'EUR', 'BottleNote': '', 'PurchaseNote': '', 'ConsumptionDate': '', 'ConsumptionType': '', 'ShortType': '', 'ConsumptionNote': '', 'ConsumptionRevenue': '', 'ConsumptionRevenueCurrency': ''}
+        ], data)
+
+    @requests_mock.Mocker()
+    def test_get_bottles_with_empty_result(self, m):
+        """Test get bottles with empty result."""
+        url = "https://www.cellartracker.com/xlquery.asp?User=test-username&Password=test-password&Table=Bottles&Format=tab&Location=1"
+        file = open("./tests/fixtures/bottles_empty.tsv", "r")
+        m.register_uri("GET", url, status_code=200, text=file.read())
+        file.close
+
+        cellartracker = CellarTracker(username="test-username", password="test-password")
+        data = cellartracker.get_bottles()
+        self.assertEqual([], data)
+
+    @requests_mock.Mocker()
+    def test_get_bottles_with_invalid_credentials(self, m):
+        """Test get bottles with invalid credentials."""
+        url = "https://www.cellartracker.com/xlquery.asp?User=invalid-username&Password=invalid-password&Table=Bottles&Format=tab&Location=1"
+        file = open("./tests/fixtures/not_logged.html", "r")
+        m.register_uri("GET", url, status_code=200, text=file.read())
+        file.close
+
+        cellartracker = CellarTracker(username="invalid-username", password="invalid-password")
+        with self.assertRaises(AuthenticationError):
+            cellartracker.get_bottles()
+
+    @requests_mock.Mocker()
+    def test_get_bottles_with_error(self, m):
+        """Test get bottles with error."""
+        url = "https://www.cellartracker.com/xlquery.asp?User=test-username&Password=test-password&Table=Bottles&Format=tab&Location=1"
+        m.register_uri("GET", url, exc=requests.exceptions.ConnectTimeout)
+
+        cellartracker = CellarTracker(username="test-username", password="test-password")
+        with self.assertRaises(CannotConnect):
+            cellartracker.get_bottles()
