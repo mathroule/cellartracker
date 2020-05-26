@@ -24,5 +24,5 @@ To use CellarTracker in a project::
     client.get_availability()   # Return Availability
     client.get_tag()            # Return Tag
     client.get_pro_review()     # Return ProReview
-    client.get_bottles()    # Return Bottles
+    client.get_bottles()        # Return Bottles
     client.get_food_tag()       # Return FoodTag
