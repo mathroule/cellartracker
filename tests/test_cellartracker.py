@@ -125,3 +125,53 @@ class TestCellartracker(unittest.TestCase):
         cellartracker = CellarTracker(username="test-username", password="test-password")
         with self.assertRaises(CannotConnect):
             cellartracker.get_inventory()
+
+    @requests_mock.Mocker()
+    def test_get_purchase(self, m):
+        """Test get purchase."""
+        url = "https://www.cellartracker.com/xlquery.asp?User=test-username&Password=test-password&Table=Purchase&Format=tab&Location=1"
+        file = open("./tests/fixtures/purchase.tsv", "r")
+        m.register_uri("GET", url, status_code=200, text=file.read())
+        file.close
+
+        cellartracker = CellarTracker(username="test-username", password="test-password")
+        data = cellartracker.get_purchase()
+        self.assertEqual([
+            {'iWine': '684674', 'iPurchase': '123799475', 'PurchaseDate': '5/25/2020', 'DeliveryDate': '5/25/2020', 'StoreName': 'Unknown', 'Currency': 'EUR', 'ExchangeRate': '1', 'Price': '0', 'NativePrice': '0', 'NativePriceCurrency': 'EUR', 'Quantity': '3', 'Remaining': '3', 'OrderNumber': '', 'Delivered': 'False', 'Size': '750ml', 'SortSize': '12', 'Vintage': '2008', 'Wine': 'Pétrus', 'SortWine': 'Pétrus', 'Locale': 'France, Bordeaux, Libournais, Pomerol', 'Type': 'Red', 'Color': 'Red', 'Category': 'Dry', 'Producer': 'Pétrus', 'Varietal': 'Red Bordeaux Blend', 'MasterVarietal': 'Red Bordeaux Blend', 'Designation': 'Unknown', 'Vineyard': 'Unknown', 'Country': 'France', 'Region': 'Bordeaux', 'SubRegion': 'Libournais', 'Appellation': 'Pomerol', 'cLabels': '788'},
+            {'iWine': '118542', 'iPurchase': '123864434', 'PurchaseDate': '4/8/2020', 'DeliveryDate': '4/8/2020', 'StoreName': 'Unknown', 'Currency': 'EUR', 'ExchangeRate': '1', 'Price': '3500', 'NativePrice': '3500', 'NativePriceCurrency': 'EUR', 'Quantity': '2', 'Remaining': '1', 'OrderNumber': '', 'Delivered': 'True', 'Size': '750ml', 'SortSize': '12', 'Vintage': '2003', 'Wine': 'Domaine de la Romanée-Conti La Tâche', 'SortWine': 'Romanée-Conti, Domaine de la La Tâche', 'Locale': 'France, Burgundy, Côte de Nuits, La Tâche Grand Cru', 'Type': 'Red', 'Color': 'Red', 'Category': 'Dry', 'Producer': 'Domaine de la Romanée-Conti', 'Varietal': 'Pinot Noir', 'MasterVarietal': 'Pinot Noir', 'Designation': 'Unknown', 'Vineyard': 'Unknown', 'Country': 'France', 'Region': 'Burgundy', 'SubRegion': 'Côte de Nuits', 'Appellation': 'La Tâche Grand Cru', 'cLabels': '484'},
+            {'iWine': '1367113', 'iPurchase': '123864410', 'PurchaseDate': '11/6/2019', 'DeliveryDate': '11/6/2019', 'StoreName': 'Unknown', 'Currency': 'EUR', 'ExchangeRate': '1', 'Price': '230', 'NativePrice': '230', 'NativePriceCurrency': 'EUR', 'Quantity': '6', 'Remaining': '5', 'OrderNumber': '', 'Delivered': 'True', 'Size': '750ml', 'SortSize': '12', 'Vintage': '2011', 'Wine': "Château d'Yquem", 'SortWine': "Yquem, Château d'", 'Locale': 'France, Bordeaux, Sauternais, Sauternes', 'Type': 'White - Sweet/Dessert', 'Color': 'White', 'Category': 'Sweet/Dessert', 'Producer': "Château d'Yquem", 'Varietal': 'Sémillon-Sauvignon Blanc Blend', 'MasterVarietal': 'Sémillon-Sauvignon Blanc Blend', 'Designation': 'Unknown', 'Vineyard': 'Unknown', 'Country': 'France', 'Region': 'Bordeaux', 'SubRegion': 'Sauternais', 'Appellation': 'Sauternes', 'cLabels': '2199'}
+        ], data)
+
+    @requests_mock.Mocker()
+    def test_get_purchase_with_empty_result(self, m):
+        """Test get purchase with empty result."""
+        url = "https://www.cellartracker.com/xlquery.asp?User=test-username&Password=test-password&Table=Purchase&Format=tab&Location=1"
+        file = open("./tests/fixtures/purchase_empty.tsv", "r")
+        m.register_uri("GET", url, status_code=200, text=file.read())
+        file.close
+
+        cellartracker = CellarTracker(username="test-username", password="test-password")
+        data = cellartracker.get_purchase()
+        self.assertEqual([], data)
+
+    @requests_mock.Mocker()
+    def test_get_purchase_with_invalid_credentials(self, m):
+        """Test get purchase with invalid credentials."""
+        url = "https://www.cellartracker.com/xlquery.asp?User=invalid-username&Password=invalid-password&Table=Purchase&Format=tab&Location=1"
+        file = open("./tests/fixtures/not_logged.html", "r")
+        m.register_uri("GET", url, status_code=200, text=file.read())
+        file.close
+
+        cellartracker = CellarTracker(username="invalid-username", password="invalid-password")
+        with self.assertRaises(AuthenticationError):
+            cellartracker.get_purchase()
+
+    @requests_mock.Mocker()
+    def test_get_purchase_with_error(self, m):
+        """Test get purchase with error."""
+        url = "https://www.cellartracker.com/xlquery.asp?User=test-username&Password=test-password&Table=Purchase&Format=tab&Location=1"
+        m.register_uri("GET", url, exc=requests.exceptions.ConnectTimeout)
+
+        cellartracker = CellarTracker(username="test-username", password="test-password")
+        with self.assertRaises(CannotConnect):
+            cellartracker.get_purchase()
