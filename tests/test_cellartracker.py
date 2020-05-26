@@ -223,3 +223,52 @@ class TestCellartracker(unittest.TestCase):
         cellartracker = CellarTracker(username="test-username", password="test-password")
         with self.assertRaises(CannotConnect):
             cellartracker.get_pending()
+
+    @requests_mock.Mocker()
+    def test_get_consumed(self, m):
+        """Test get consumed."""
+        url = "https://www.cellartracker.com/xlquery.asp?User=test-username&Password=test-password&Table=Consumed&Format=tab&Location=1"
+        file = open("./tests/fixtures/consumed.tsv", "r")
+        m.register_uri("GET", url, status_code=200, text=file.read())
+        file.close
+
+        cellartracker = CellarTracker(username="test-username", password="test-password")
+        data = cellartracker.get_consumed()
+        self.assertEqual([
+            {'iConsumed': '129197435', 'iWine': '1367113', 'Type': 'White - Sweet/Dessert', 'Consumed': '5/21/2020', 'ConsumedYear': '2020', 'ConsumedQuarter': 'Q2', 'ConsumedMonth': '5', 'ConsumedDay': '21', 'ConsumedWeekday': '5', 'Size': '750ml', 'SortSize': '12', 'ShortType': 'Drank', 'Currency': 'EUR', 'ExchangeRate': '1', 'Value': '230', 'Price': '230', 'NativePrice': '230', 'NativePriceCurrency': 'EUR', 'MenuPrice': '0', 'cNotes': '0', 'iNote': '', 'cLabels': '2199', 'NativeRevenue': '0', 'NativeRevenueCurrency': 'EUR', 'Revenue': '0', 'RevenueCurrency': 'EUR', 'RevenueExchangeRate': '1', 'ConsumptionNote': 'Excellent!', 'PurchaseNote': '', 'BottleNote': '', 'Location': 'Cellar', 'Bin': '', 'Vintage': '2011', 'Wine': "Château d'Yquem", 'SortWine': "Yquem, Château d'", 'Locale': 'France, Bordeaux, Sauternais, Sauternes', 'Color': 'White', 'Category': 'Sweet/Dessert', 'Varietal': 'Sémillon-Sauvignon Blanc Blend', 'MasterVarietal': 'Sémillon-Sauvignon Blanc Blend', 'Designation': 'Unknown', 'Vineyard': 'Unknown', 'Country': 'France', 'Region': 'Bordeaux', 'SubRegion': 'Sauternais', 'Appellation': 'Sauternes'},
+            {'iConsumed': '129196205', 'iWine': '118542', 'Type': 'Red', 'Consumed': '5/1/2020', 'ConsumedYear': '2020', 'ConsumedQuarter': 'Q2', 'ConsumedMonth': '5', 'ConsumedDay': '1', 'ConsumedWeekday': '6', 'Size': '750ml', 'SortSize': '12', 'ShortType': 'Drank', 'Currency': 'EUR', 'ExchangeRate': '1', 'Value': '3500', 'Price': '3500', 'NativePrice': '3500', 'NativePriceCurrency': 'EUR', 'MenuPrice': '0', 'cNotes': '0', 'iNote': '', 'cLabels': '484', 'NativeRevenue': '0', 'NativeRevenueCurrency': 'EUR', 'Revenue': '0', 'RevenueCurrency': 'EUR', 'RevenueExchangeRate': '1', 'ConsumptionNote': 'Absolutely fantastic wine!', 'PurchaseNote': '', 'BottleNote': '', 'Location': 'Cellar', 'Bin': '', 'Vintage': '2003', 'Wine': 'Domaine de la Romanée-Conti La Tâche', 'SortWine': 'Romanée-Conti, Domaine de la La Tâche', 'Locale': 'France, Burgundy, Côte de Nuits, La Tâche Grand Cru', 'Color': 'Red', 'Category': 'Dry', 'Varietal': 'Pinot Noir', 'MasterVarietal': 'Pinot Noir', 'Designation': 'Unknown', 'Vineyard': 'Unknown', 'Country': 'France', 'Region': 'Burgundy', 'SubRegion': 'Côte de Nuits', 'Appellation': 'La Tâche Grand Cru'}
+        ], data)
+
+    @requests_mock.Mocker()
+    def test_get_consumed_with_empty_result(self, m):
+        """Test get consumed with empty result."""
+        url = "https://www.cellartracker.com/xlquery.asp?User=test-username&Password=test-password&Table=Consumed&Format=tab&Location=1"
+        file = open("./tests/fixtures/consumed_empty.tsv", "r")
+        m.register_uri("GET", url, status_code=200, text=file.read())
+        file.close
+
+        cellartracker = CellarTracker(username="test-username", password="test-password")
+        data = cellartracker.get_consumed()
+        self.assertEqual([], data)
+
+    @requests_mock.Mocker()
+    def test_get_consumed_with_invalid_credentials(self, m):
+        """Test get consumed with invalid credentials."""
+        url = "https://www.cellartracker.com/xlquery.asp?User=invalid-username&Password=invalid-password&Table=Consumed&Format=tab&Location=1"
+        file = open("./tests/fixtures/not_logged.html", "r")
+        m.register_uri("GET", url, status_code=200, text=file.read())
+        file.close
+
+        cellartracker = CellarTracker(username="invalid-username", password="invalid-password")
+        with self.assertRaises(AuthenticationError):
+            cellartracker.get_consumed()
+
+    @requests_mock.Mocker()
+    def test_get_consumed_with_error(self, m):
+        """Test get consumed with error."""
+        url = "https://www.cellartracker.com/xlquery.asp?User=test-username&Password=test-password&Table=Consumed&Format=tab&Location=1"
+        m.register_uri("GET", url, exc=requests.exceptions.ConnectTimeout)
+
+        cellartracker = CellarTracker(username="test-username", password="test-password")
+        with self.assertRaises(CannotConnect):
+            cellartracker.get_consumed()
