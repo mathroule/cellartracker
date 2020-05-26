@@ -30,9 +30,9 @@ Python package to export CellarTracker data.
 Features
 --------
 
-Use the `CellarTracker export`_ capabilities.
+Use the `CellarTracker export data`_ capabilities.
 
-.. _CellarTracker export: https://support.cellartracker.com/article/29-exporting-data
+.. _CellarTracker export data: https://support.cellartracker.com/article/29-exporting-data
 
 
 Credits
