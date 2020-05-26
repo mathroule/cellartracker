@@ -6,7 +6,7 @@ CellarTracker
 .. image:: https://img.shields.io/pypi/v/cellartracker.svg
         :target: https://pypi.python.org/pypi/cellartracker
 
-.. image:: https://img.shields.io/travis/mathroule/cellartracker.svg
+.. image:: https://travis-ci.com/mathroule/cellartracker.svg?branch=master
         :target: https://travis-ci.com/mathroule/cellartracker
 
 .. image:: https://readthedocs.org/projects/cellartracker/badge/?version=latest
