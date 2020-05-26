@@ -175,3 +175,51 @@ class TestCellartracker(unittest.TestCase):
         cellartracker = CellarTracker(username="test-username", password="test-password")
         with self.assertRaises(CannotConnect):
             cellartracker.get_purchase()
+
+    @requests_mock.Mocker()
+    def test_get_pending(self, m):
+        """Test get pending."""
+        url = "https://www.cellartracker.com/xlquery.asp?User=test-username&Password=test-password&Table=Pending&Format=tab&Location=1"
+        file = open("./tests/fixtures/pending.tsv", "r")
+        m.register_uri("GET", url, status_code=200, text=file.read())
+        file.close
+
+        cellartracker = CellarTracker(username="test-username", password="test-password")
+        data = cellartracker.get_pending()
+        self.assertEqual([
+            {'iWine': '684674', 'iPurchase': '123799475', 'PurchaseDate': '5/25/2020', 'DeliveryDate': '5/25/2020', 'StoreName': 'Unknown', 'Currency': 'EUR', 'ExchangeRate': '1', 'Price': '0', 'NativePrice': '0', 'NativePriceCurrency': 'EUR', 'Quantity': '3', 'Remaining': '3', 'OrderNumber': '', 'Delivered': 'False', 'Size': '750ml', 'SortSize': '12', 'Vintage': '2008', 'Wine': 'Pétrus', 'SortWine': 'Pétrus', 'Locale': 'France, Bordeaux, Libournais, Pomerol', 'Type': 'Red', 'Color': 'Red', 'Category': 'Dry', 'Producer': 'Pétrus', 'Varietal': 'Red Bordeaux Blend', 'MasterVarietal': 'Red Bordeaux Blend', 'Designation': 'Unknown', 'Vineyard': 'Unknown', 'Country': 'France', 'Region': 'Bordeaux', 'SubRegion': 'Libournais', 'Appellation': 'Pomerol', 'cLabels': '788'}
+        ], data)
+
+    @requests_mock.Mocker()
+    def test_get_pending_with_empty_result(self, m):
+        """Test get pending with empty result."""
+        url = "https://www.cellartracker.com/xlquery.asp?User=test-username&Password=test-password&Table=Pending&Format=tab&Location=1"
+        file = open("./tests/fixtures/pending_empty.tsv", "r")
+        m.register_uri("GET", url, status_code=200, text=file.read())
+        file.close
+
+        cellartracker = CellarTracker(username="test-username", password="test-password")
+        data = cellartracker.get_pending()
+        self.assertEqual([], data)
+
+    @requests_mock.Mocker()
+    def test_get_pending_with_invalid_credentials(self, m):
+        """Test get pending with invalid credentials."""
+        url = "https://www.cellartracker.com/xlquery.asp?User=invalid-username&Password=invalid-password&Table=Pending&Format=tab&Location=1"
+        file = open("./tests/fixtures/not_logged.html", "r")
+        m.register_uri("GET", url, status_code=200, text=file.read())
+        file.close
+
+        cellartracker = CellarTracker(username="invalid-username", password="invalid-password")
+        with self.assertRaises(AuthenticationError):
+            cellartracker.get_pending()
+
+    @requests_mock.Mocker()
+    def test_get_pending_with_error(self, m):
+        """Test get pending with error."""
+        url = "https://www.cellartracker.com/xlquery.asp?User=test-username&Password=test-password&Table=Pending&Format=tab&Location=1"
+        m.register_uri("GET", url, exc=requests.exceptions.ConnectTimeout)
+
+        cellartracker = CellarTracker(username="test-username", password="test-password")
+        with self.assertRaises(CannotConnect):
+            cellartracker.get_pending()
