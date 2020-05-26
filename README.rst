@@ -33,38 +33,55 @@ Features
 Using [CellarTracker exporting data](https://support.cellartracker.com/article/29-exporting-data) capabilities.
 
 Choosing the data to export
-| Value        | Description                                                                               |
-|--------------|-------------------------------------------------------------------------------------------|
-| List         | Wine Summary  (default)                                                                   |
-| Inventory    | Individual bottles                                                                        |
-| Notes        | Your tasting notes                                                                        |
-| PrivateNotes | Your private notes                                                                        |
-| Purchase     | Your purchases                                                                            |
-| Pending      | Your pending purchases                                                                    |
-| Consumed     | Your consumed dottles                                                                     |
-| Availability | Drinkability report                                                                       |
-| Tag          | Wishlists                                                                                 |
-| ProReview    | Your manually-entered professional reviews                                                |
-| Bottles      | All bottles with a BottleState parameter (-1 for pending, 1 for in-stock, 0 for consumed) |
-| FoodTags     | Your food pairing tags                                                                    |
-
++--------------+----------------------------------------------------------------------------------------------------------------------+
+| Value        | Description                                                                                                          |
++--------------+----------------------------------------------------------------------------------------------------------------------+
+| List         | Wine Summary (default)                                                                                               |
++--------------+----------------------------------------------------------------------------------------------------------------------+
+| Inventory    | Individual Bottles                                                                                                   |
++--------------+----------------------------------------------------------------------------------------------------------------------+
+| Notes        | Your Tasting Notes                                                                                                   |
++--------------+----------------------------------------------------------------------------------------------------------------------+
+| PrivateNotes | Your Private Notes                                                                                                   |
++--------------+----------------------------------------------------------------------------------------------------------------------+
+| Purchase     | Your Purchases                                                                                                       |
++--------------+----------------------------------------------------------------------------------------------------------------------+
+| Pending      | Your Pending Purchases (Futures)                                                                                     |
++--------------+----------------------------------------------------------------------------------------------------------------------+
+| Consumed     | Your Consumed Bottles                                                                                                |
++--------------+----------------------------------------------------------------------------------------------------------------------+
+| Availability | Ready to Drink (Drinkability) report                                                                                 |
++--------------+----------------------------------------------------------------------------------------------------------------------+
+| Tag          | Wishlists                                                                                                            |
++--------------+----------------------------------------------------------------------------------------------------------------------+
+| ProReview    | Your manually-entered Professional Reviews                                                                           |
++--------------+----------------------------------------------------------------------------------------------------------------------+
+| Bottles      | A special raw view showing all bottles with a BottleState parameter (-1 for pending, 1 for in-stock, 0 for consumed) |
++--------------+----------------------------------------------------------------------------------------------------------------------+
+| FoodTags     | Your food pairing tags                                                                                               |
++--------------+----------------------------------------------------------------------------------------------------------------------+
 
 Choosing the export format:
-| Value | Description            |
-|-------|------------------------|
-| html	| HTML output (default)  |
-| xml	| XML-based output       |
-| tab	| Tab-delimited text     |
-| csv	| Comma Separated Values |
++-------+----------------------------------------+
+| Value | Description                            |
++-------+----------------------------------------+
+| html  | HTML output (default if not specified) |
++-------+----------------------------------------+
+| xml   | XML-based output                       |
++-------+----------------------------------------+
+| tab   | Tab-delimited text                     |
++-------+----------------------------------------+
+| csv   | Comma Separated Values                 |
++-------+----------------------------------------+
 
 Usage
 -----
 
-```
-usage: cellartracker [-h] -u USERNAME -p PASSWORD
-                     [-t {List,Inventory,Notes,PrivateNotes,Purchase,Pending,Consumed,Availability,Tag,ProReview,Bottles,FoodTag}]
-                     [-f {html,xml,tab,csv}]
-```
+.. code-block:: bash
+        usage: cellartracker [-h] -u USERNAME -p PASSWORD
+                        [-t {List,Inventory,Notes,PrivateNotes,Purchase,Pending,Consumed,Availability,Tag,ProReview,Bottles,FoodTag}]
+                        [-f {html,xml,tab,csv}]
+
 
 Credits
 -------
