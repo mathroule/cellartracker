@@ -46,8 +46,8 @@ class CellarTracker(object):
         """Get consumed."""
         return self._get_data(table=CellarTrackerTable.Consumed)
 
-    def get_awailability(self):
-        """Get awailability."""
+    def get_availability(self):
+        """Get availability."""
         return self._get_data(table=CellarTrackerTable.Availability)
 
     def get_tag(self):
@@ -70,7 +70,7 @@ class CellarTracker(object):
         """Get data."""
         return _parse_data(
             self.client.get(table=table, format=CellarTrackerFormat.tab)
-            )
+        )
 
 
 def _parse_data(data: str):
