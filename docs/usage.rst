@@ -5,8 +5,8 @@ Usage
 To use CellarTracker from the console::
 
     $ cellartracker [-h] -u USERNAME -p PASSWORD
-                     [-t {List,Inventory,Notes,PrivateNotes,Purchase,Pending,Consumed,Availability,Tag,ProReview,Bottles,FoodTag}]
-                     [-f {html,xml,tab,csv}]
+                    [-t {List,Inventory,Notes,PrivateNotes,Purchase,Pending,Consumed,Availability,Tag,ProReview,Bottles,FoodTag}]
+                    [-f {html,xml,tab,csv}]
 
 
 To use CellarTracker in a project::
