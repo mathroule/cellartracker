@@ -11,9 +11,9 @@ To use CellarTracker from the console::
 
 To use CellarTracker in a project::
 
-    from cellartracker import CellarTracker
+    from cellartracker import cellartracker
     
-    client = CellarTracker(username, password)
+    client = cellartracker.CellarTracker(username, password)
     client.get_list()           # Return List
     client.get_inventory()      # Return Inventory
     client.get_notes()          # Return Notes
