@@ -18,7 +18,7 @@ test_requirements = ['requests_mock']
 
 setup(
     author="Mathieu Rul",
-    author_email='mathieu.rul@gmail.com',
+    author_email='mathroule@gmail.com',
     python_requires='>=3.5',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
