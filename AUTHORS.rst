@@ -5,7 +5,7 @@ Credits
 Development Lead
 ----------------
 
-* Mathieu Rul <mathieu.rul@gmail.com>
+* Mathieu Rul <mathroule@gmail.com>
 
 Contributors
 ------------
