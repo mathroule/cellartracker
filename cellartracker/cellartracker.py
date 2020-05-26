@@ -19,16 +19,52 @@ class CellarTracker(object):
         self.client = CellarTrackerClient(username, password)
 
     def get_list(self):
-        """Get list data."""
+        """Get list."""
         return self._get_data(table=CellarTrackerTable.List)
 
-    def get_availability(self):
-        """Get availability data."""
+    def get_inventory(self):
+        """Get inventory."""
+        return self._get_data(table=CellarTrackerTable.Inventory)
+
+    def get_notes(self):
+        """Get notes."""
+        return self._get_data(table=CellarTrackerTable.Notes)
+
+    def get_private_notes(self):
+        """Get private notes data."""
+        return self._get_data(table=CellarTrackerTable.PrivateNotes)
+
+    def get_purchase(self):
+        """Get purchase data."""
+        return self._get_data(table=CellarTrackerTable.Purchase)
+
+    def get_pending(self):
+        """Get pending."""
+        return self._get_data(table=CellarTrackerTable.Pending)
+
+    def get_consumed(self):
+        """Get consumed."""
+        return self._get_data(table=CellarTrackerTable.Consumed)
+
+    def get_awailability(self):
+        """Get awailability."""
         return self._get_data(table=CellarTrackerTable.Availability)
 
+    def get_tag(self):
+        """Get tag."""
+        return self._get_data(table=CellarTrackerTable.Tag)
+
+    def get_pro_review(self):
+        """Get pro review."""
+        return self._get_data(table=CellarTrackerTable.ProReview)
+
     def get_bottles(self):
-        """Get bottles data."""
+        """Get bottles."""
         return self._get_data(table=CellarTrackerTable.Bottles)
+
+    def get_food_tag(self):
+        """Get food tag."""
+        return self._get_data(table=CellarTrackerTable.FoodTag)
 
     def _get_data(self, table: CellarTrackerTable):
         """Get data."""
