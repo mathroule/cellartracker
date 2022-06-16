@@ -5,5 +5,5 @@ watchdog==2.1.8
 flake8==4.0.1
 tox==3.25.0
 coverage==6.4.1
-Sphinx==5.0.1
+Sphinx==5.0.2
 twine==4.0.0
