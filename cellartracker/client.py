@@ -4,8 +4,13 @@ from .enum import CellarTrackerFormat, CellarTrackerTable
 
 class CellarTrackerClient(object):
 
-    def __init__(self, username: None, password: None):
-        """Initialize the client object."""
+    def __init__(self, username: str, password: str):
+        """Initialize the client object.
+
+        Args:
+            username: CellarTracker handle
+            password: CellarTracker account password
+        """
         self._api = CellarTrackerAPI()
         self._username = username
         self._password = password

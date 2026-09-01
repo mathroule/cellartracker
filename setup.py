@@ -4,13 +4,16 @@
 
 from setuptools import setup, find_packages
 
-with open('README.rst') as readme_file:
-    readme = readme_file.read()
+with open('README.rst') as readme_rst_file:
+    readme = readme_rst_file.read()
+
+with open('README.md') as readme_md_file:
+    readme_md = readme_md_file.read()
 
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['requests'],
+requirements = ['requests']
 
 setup_requirements = [ ]
 
